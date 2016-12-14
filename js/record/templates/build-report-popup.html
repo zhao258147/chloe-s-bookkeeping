@@ -1,0 +1,63 @@
+<h3>
+    {{message}}
+</h3>
+
+<table>
+    <tr>
+        <ion-checkbox ng-model="includeTypes.getPayments">Payments Received</ion-checkbox>
+    </tr>
+    <tr>
+        <ion-checkbox ng-model="includeTypes.getCosts">Costs</ion-checkbox>
+    </tr>
+    <tr>
+        <ion-checkbox ng-model="includeTypes.getInvoices">Invoice Items</ion-checkbox>
+    </tr>
+    <tr>
+        <ion-checkbox ng-model="includeTypes.getCreadits">Credits to Customer</ion-checkbox>
+    </tr>
+    <tr>
+        <th>
+
+        </th>
+
+        <th style="padding-left: 15px; padding-right: 15px">
+            Start Date:
+        </th>
+        <th style="padding-left: 15px; padding-right: 15px">
+            End Date:
+        </th>
+    </tr>
+    <tr>
+        <td>
+            Year:
+        </td>
+        <td>
+            <input ng-model="start.year" type="number" min="2015" max="2020" placeholder="Start Year" />
+        </td>
+        <td>
+            <input ng-model="end.year" type="number" min="2015" max="2020" placeholder="End Year" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Month:
+        </td>
+        <td>
+            <input ng-model="start.month" type="number" min="1" max="12" placeholder="Start Month" />
+        </td>
+        <td>
+            <input ng-model="end.month" type="number" min="1" max="12" placeholder="End Month" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Date:
+        </td>
+        <td>
+            <input ng-model="start.date" type="number" min="1" max="31" placeholder="Start Date" />
+        </td>
+        <td>
+            <input ng-model="end.date" type="number" min="1" max="31" placeholder="End Date" />
+        </td>
+    </tr>
+</table>

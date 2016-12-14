@@ -1,0 +1,79 @@
+<ion-view view-title="Customer" cache-view="false">
+    <ion-content>
+        <h1>
+            {{customer.name}}
+        </h1>
+        <div class="list">
+            <div class="item">
+                Credit: {{customer.credit}}
+            </div>
+            <div class="item item-input-inset" ng-click="showAddCredit = !showAddCredit">
+                <span ng-show="!showAddCredit">+</span><span ng-show="showAddCredit">-</span><span>&nbsp;Add Credit</span>
+            </div>
+            <div class="item item-input-inset" ng-show="showAddCredit" style="border-width: 0px;">
+                <label class="item-input-wrapper" style="margin-right: 10px">
+                    <input type="number" ng-model="newcredit.amount" placeholder="Amount">
+                </label>
+            </div>
+            <div class="item item-input-inset" ng-show="showAddCredit" style="border-width: 0px;">
+                <label class="item-input-wrapper" style="margin-right: 10px">
+                    <input type="text" ng-model="newcredit.notes" placeholder="Notes">
+                </label>
+            </div>
+            <div ng-show="showAddCredit" class="item" style="border-width: 0px;">
+                <button class="button button-small" ng-click="addCredit(); showAddCredit = false">
+                    Add Credit
+                </button>
+                <button class="button button-small" ng-click="showAddCredit = false">
+                    Cancel
+                </button>
+            </div>
+
+            <div class="item">
+                <span class="input-label">Notes on Customer:</span>
+                <textarea ng-model="customer.notes" type="text" rows="6" style="width: 100%"></textarea>
+            </div>
+        </div>
+        <div class="button-bar">
+            <button class="button pd-green" ng-click="save()">Save</button>
+            <!--<button class="button button-stable" ng-click="customerTransactions()">Customer Transactions</button>-->
+            <button class="button pd-blue" ng-click="buildReport()">Build Report</button>
+        </div>
+
+        <div class="list card">
+            <div class="item item-divider">Records</div>
+            <div class="item item-body">
+            <ion-list>
+                <label class="item item-input item-select">
+                    <div class="input-label">
+                        Sort By
+                        <button class="button button-small" ng-click="order(select.option)">
+                            Reverse
+                        </button>
+                    </div>
+
+                    <select ng-model="select.option" ng-change="order(select.option)">
+                        <option value="due">Due Date</option>
+                        <option value="invoice">Invoice</option>
+                        <option value="paid">Paid Amount</option>
+                        <option value="progress">Progress</option>
+                    </select>
+                </label>
+
+                <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="item in records | orderBy:predicate:reverse" type="item-text-wrap" href="#/tab/record/{{item.$id}}">
+                    <h2>Due: {{item.due | date:'medium'}}</h2>
+                    <p>{{item.notes}}</p>
+                    <p style="color: {{(item.paid/item.invoice) >= 1 ? 'green': 'red'}}">Amount paid: {{item.paid}}/{{item.invoice}}</p>
+
+                    <p style="color: {{(item.progress == 100) ? 'green': 'red'}}">Progress: {{item.progress}}%</p>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+
+                    <ion-option-button class="button-calm" ng-click="edit(item)">
+                        Delete
+                    </ion-option-button>
+                </ion-item>
+            </ion-list>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,16 @@
+<div>
+    <label class="item-input-wrapper">
+        <input type="number" ng-model="newpayment.amount" ng-focus="showPaymentMethodSuggestion = false" placeholder="Amount">
+    </label>
+    <label class="item-input-wrapper">
+        <input type="text" ng-model="newpayment.method" placeholder="Payment Method">
+    </label>
+    <div class="list list-inset" ng-show="showPaymentMethodSuggestion">
+        <div class="item payment-button" ng-repeat="paymentMethod in paymentMethods | filter:newpayment.method" type="item-text-wrap" ng-click="newpayment.method = paymentMethod">
+            <p>{{paymentMethod}}</p>
+        </div>
+    </div>
+    <label class="item-input-wrapper">
+        <textarea type="text" ng-model="newpayment.notes" placeholder="Notes" ng-focus="showPaymentMethodSuggestion = false" rows="6"/>
+    </label>
+</div>

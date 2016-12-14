@@ -1,0 +1,30 @@
+<ion-view view-title="Customers">
+    <ion-content>
+
+
+        <div class="list">
+
+            <div class="item item-input-inset">
+                <label class="item-input-wrapper">
+                    <input type="text" placeholder="search key" ng-model="searchKey">
+                </label>
+            </div>
+
+        </div>
+        <div class="list card">
+            <div class="item item-body">
+            <ion-list>
+                <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="item in customers | filter:searchKey" type="item-text-wrap" ng-click="onClickCustomer(item)">
+                    <h2>{{item.name}}</h2>
+                    <p>{{item.alias}}</p>
+                    <i class="icon ion-chevron-right icon-accessory"></i>
+
+                    <ion-option-button class="button-calm" ng-click="manage(item)">
+                        Manage
+                    </ion-option-button>
+                </ion-item>
+            </ion-list>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

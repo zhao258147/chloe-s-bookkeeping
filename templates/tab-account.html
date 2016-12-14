@@ -1,0 +1,42 @@
+<ion-view view-title="Account">
+  <ion-content>
+      <div class="list">
+          <a class="button pd-red" ng-click="logout()">
+              <i class="icon ion-log-out"></i>
+              Log Out
+          </a>
+
+          <div class="list card">
+              <div class="item item-divider">My Invoice Information</div>
+              <div class="item item-body">
+
+                  <label class="item item-input">
+                      <input type="text" placeholder="My Name" ng-model="user.name">
+                  </label>
+                  <label class="item item-input">
+                      <input type="text" placeholder="Address line 1" ng-model="user.address1">
+                  </label>
+                  <label class="item item-input">
+                      <input type="text" placeholder="Address line 2" ng-model="user.address2">
+                  </label>
+                  <label class="item item-input">
+                      <input type="text" placeholder="Address line 3" ng-model="user.address3">
+                  </label>
+                  <label class="item item-input">
+                      <input type="text" placeholder="Phone Number" ng-model="user.phone">
+                  </label>
+                  <label class="item item-input">
+                      <input type="text" placeholder="Terms of Service" ng-model="user.terms">
+                  </label>
+
+                  <a class="item item-icon-left" ng-click="save()">
+                      <i class="icon ion-ios-download-outline"></i>
+                      Save
+                  </a>
+              </div>
+          </div>
+      </div>
+
+
+  </ion-content>
+</ion-view>

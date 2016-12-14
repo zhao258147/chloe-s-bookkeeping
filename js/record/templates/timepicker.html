@@ -1,0 +1,46 @@
+
+<div class="row">
+    <div class="col-25 row" style="height: 80px; padding: 5px; margin: 0px" ng-show="showDatePicker">
+        <div class="col-50">
+            <p style="margin-top: 25px">Mon</p>
+        </div>
+        <ion-scroll class="col-50" zooming="false" direction="y" delegate-handle="monthScroll" on-scroll="onMonthScroll()" style="height: 80px;">
+            <p ng-repeat="item in ['--','Jan','Feb','Mar','Apr','May','Jun','July','Aug','Sep','Oct','Nov','Dec','End'] " id="month{{$index}}">
+                {{item}}
+            </p>
+        </ion-scroll>
+    </div>
+
+    <div class="col-25 row" style="height: 80px; padding: 5px; margin: 0px" ng-show="showDatePicker">
+        <div class="col-50">
+            <p style="margin-top: 25px">Date</p>
+        </div>
+        <ion-scroll class="col-50" zooming="false" direction="y" delegate-handle="dateScroll" on-scroll="onDateScroll()" style="height: 80px;">
+            <p ng-repeat="item in daysInMonth[month-1] " id="date{{$index}}">
+                {{item}}
+            </p>
+        </ion-scroll>
+    </div>
+
+    <div class="col-25 row" style="height: 80px; padding: 5px; margin: 0px" ng-show="showTimePicker">
+        <div class="col-50">
+            <p style="margin-top: 25px">Hour</p>
+        </div>
+        <ion-scroll class="col-50" zooming="false" direction="y" delegate-handle="hourScroll" on-scroll="onHourScroll()" style="height: 80px;">
+            <p ng-repeat="item in ['--',0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,'End']" id="hour{{item}}">
+                {{item}}
+            </p>
+        </ion-scroll>
+    </div>
+
+    <div class="col-25 row" style="height: 80px; padding: 5px; margin: 0px" ng-show="showTimePicker">
+        <div class="col-50">
+            <p style="margin-top: 25px">Min</p>
+        </div>
+        <ion-scroll class="col-50" zooming="false" direction="y" delegate-handle="minScroll" on-scroll="onMinScroll()" style="height: 80px;">
+            <p ng-repeat="item in ['--',0,10,20,30,40,50,'End'] " id="min{{$index}}">
+                {{item}}
+            </p>
+        </ion-scroll>
+    </div>
+</div>

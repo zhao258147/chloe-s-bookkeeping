@@ -1,0 +1,55 @@
+<ion-view view-title="Dashboard">
+    <ion-content class="padding">
+        <button class="button pd-green" ng-click="buildReport()"><i class="icon ion-clipboard"></i> Build Report</button>
+
+        <div class="list card">
+            <a style="color: black" href="#/tab/most-urgent" class="item item-divider">Most Urgent <small style="text-decoration: underline;">More</small></a>
+            <div class="item item-body">
+                <ion-list>
+                    <ion-item class="item-remove-animate item-icon-right" ng-repeat="item in recentRecords | orderBy:-created " type="item-text-wrap" href="#/tab/record/{{item.$id}}">
+                        <h2 style="margin-top: 0px">Customer: {{item.customer}}</h2>
+                        <p style="color: {{(item.due > today) ? 'green': 'red'}}">Due: {{item.due | date:'medium'}}</p>
+                        <p>{{item.notes}}</p>
+                        <p style="color: {{(item.paid - item.amount) >= 0 ? 'green': 'red'}}">Amount paid: {{item.paid}}/{{item.invoice}}</p>
+                        <p style="color: {{(item.progress == 100) ? 'green': 'red'}}">Progress: {{item.progress}}%</p>
+
+                        <i class="icon ion-chevron-right icon-accessory"></i>
+
+                        <ion-option-button class="button-calm" ng-click="complete(item, recentRecords)">
+                            Complete
+                        </ion-option-button>
+                        <ion-option-button class="button-stable" ng-click="removeFromProgressList(item, recentRecords)">
+                            Remove From List
+                        </ion-option-button>
+                    </ion-item>
+                </ion-list>
+            </div>
+        </div>
+
+        <div class="list card">
+            <a style="color: black" href="#/tab/waiting-for-payment" class="item item-divider" >Waiting for Payment <small style="text-decoration: underline;">More</small></a>
+            <div class="item item-body">
+                <ion-list>
+                    <ion-item class="item-remove-animate item-icon-right" ng-repeat="item in uncollectedRecords " type="item-text-wrap" href="#/tab/record/{{item.$id}}">
+                        <h2 style="margin-top: 0px">Customer: {{item.customer}}</h2>
+                        <p style="color: {{(item.due > today) ? 'green': 'red'}}">Due: {{item.due | date:'medium'}}</p>
+                        <p>{{item.notes}}</p>
+                        <p style="color: {{(item.paid - item.amount) >= 0 ? 'green': 'red'}}">Amount paid: {{item.paid}}/{{item.invoice}}</p>
+                        <p style="color: {{(item.progress == 100) ? 'green': 'red'}}">Progress: {{item.progress}}%</p>
+
+                        <i class="icon ion-chevron-right icon-accessory"></i>
+
+                        <ion-option-button class="button-stable" ng-click="goto(item)">
+                            Add Payment
+                        </ion-option-button>
+                        <ion-option-button class="button-calm" ng-click="closeWithoutClearingPayment(item, uncollectedRecords)">
+                            Remove From List
+                        </ion-option-button>
+                    </ion-item>
+                </ion-list>
+            </div>
+        </div>
+
+
+    </ion-content>
+</ion-view>

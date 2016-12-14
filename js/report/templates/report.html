@@ -1,0 +1,92 @@
+<ion-view>
+    <ion-content>
+        <ion-scroll zooming="false" direction="xy">
+            <table style="border-bottom: 1px solid">
+                <tr style="border-bottom: 1px solid">
+                    <th>
+                        <button class="button button-stable" ng-click="order('amount')">
+                            Amount
+                        </button>
+                    </th>
+                    <th>
+                        <button class="button button-stable" ng-click="order('type')">
+                            Type
+                        </button>
+                    </th>
+                    <th>
+                        <button class="button button-stable" ng-click="order('customerName')">
+                            Customer
+                        </button>
+                    </th>
+                    <th>
+                        <button style="width: 200px" class="button button-stable">
+                            Notes
+                        </button>
+                    </th>
+                    <th>
+                        <button style="width: 120px" class="button button-stable" ng-click="order('timestamp')">
+                            Time
+                        </button>
+                    </th>
+                    <th>
+                        <button style="width: 120px" class="button button-stable" ng-click="order('due')">
+                            Due
+                        </button>
+                    </th>
+                    <th>
+                        <button style="width: 200px" class="button button-stable">
+
+                        </button>
+                    </th>
+
+                    <!--<th>-->
+                    <!--<button class="button button-stable" ng-click="order('deposit')">-->
+                    <!--Deposit-->
+                    <!--</button>-->
+                    <!--</th>-->
+                    <!--<th>-->
+                    <!--<button class="button button-stable" ng-click="order('recordCreated')">-->
+                    <!--Created-->
+                    <!--</button>-->
+                    <!--</th>-->
+
+                    <!--<th>-->
+                    <!--<button class="button button-stable" ng-click="order('totalAmount')">-->
+                    <!--Total-->
+                    <!--</button>-->
+                    <!--</th>-->
+                </tr>
+                <tr ng-repeat="item in transactions | orderBy:predicate:reverse">
+                    <td style="width: 65px">{{item.amount}}</td>
+                    <td style="width: 65px">{{item.type}}</td>
+                    <td style="width: 80px">{{item.customerName}}</td>
+                    <td style="width: 200px">{{item.notes}}</td>
+                    <td style="width: 120px">{{item.timestamp | date:'MM/dd h:mma'}}</td>
+                    <!--<td>{{item.deposit}}</td>-->
+                    <!--<td>{{item.recordCreated | date:medium}}</td>-->
+                    <td style="width: 120px">{{item.due | date:'MM/dd h:mma'}}</td>
+                    <td style="width: 200px">{{item.method}}</td>
+
+
+                    <!--<td>{{item.totalAmount}}</td>-->
+                </tr>
+            </table>
+        </ion-scroll>
+
+
+        <div class="list">
+            <div class="item" ng-show="paymentSum > 0">
+                Total Payment Amount: {{paymentSum}}
+            </div>
+            <div class="item" ng-show="costSum > 0">
+                Total Cost Amount: {{costSum}}
+            </div>
+            <div class="item" ng-show="invoiceSum > 0">
+                Total Invoice Amount: {{invoiceSum}}
+            </div>
+            <div class="item" ng-show="creditSum > 0">
+                Total Credit Amount: {{creditSum}}
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

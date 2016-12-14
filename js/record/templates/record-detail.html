@@ -1,0 +1,284 @@
+<ion-view view-title="Records" cache-view="false">
+    <!--<ion-nav-bar class="bar-stable nav-title-slide-ios7">-->
+        <!--<ion-nav-back-button side="left" class="button back-button" ng-click="back()"><i class="icon ion-ios-arrow-back"></i>Customers</ion-nav-back-button>-->
+        <!--<ion-nav-buttons side="right">-->
+            <!--<button class="button" ng-click="addRecord()">-->
+                <!--Add-->
+            <!--</button>-->
+        <!--</ion-nav-buttons>-->
+    <!--</ion-nav-bar>-->
+
+    <ion-content ng-click="onClick($event)">
+        <input class="button pd-green" type="submit" ng-click="save()" value="Save" />
+        <button class="button button-stable" ng-click="paidInFull()">Paid in Full</button>
+        <button class="button button-stable" ng-click="buildInvoice()">Build Invoice</button>
+        <form class="list card">
+            <div class="item item-body">
+
+
+                <div class="list">
+                    <div class="item">
+                        <p>Due: {{duedate | date:'medium'}}</p>
+                        <p style="color: green" ng-show="record.datePaymentCleared">Payment Cleared at: {{record.datePaymentCleared | date:'medium' }}</p>
+                        <p style="color: red" ng-show="!record.datePaymentCleared">Waiting for payment</p>
+                        <p style="color: green" ng-show="record.completeDate">Work Completed at: {{record.completeDate | date:'medium' }}</p>
+                        <p style="color: red" ng-show="!record.completeDate">Work in progress</p>
+                    </div>
+
+                    <div class="item range">
+                        Work Progress:
+                        <input type="range" min="0" max="100" step="1" ng-model="record.progress" ng-change="progressChange(record.progress)">
+                        {{record.progress}}%
+                    </div>
+
+                    <div class="item" style="padding: 10px; padding-top: 15px; padding-left: 50px;">
+                        <div style="width: 10px; height: 10px; background-color: #5698c6; float: left;"></div>
+                        <span style="font-size: 10px; float: left; margin-top: -5px; margin-left: 5px">Paid: {{record.paid}}</span>
+                        <div style="width: 10px; height: 10px; background-color: #cfd8e9; float: left; margin-left: 20px"></div>
+                        <span style="font-size: 10px; float: left; margin-top: -5px; margin-left: 5px">Not Paid: {{record.invoice - record.paid}}</span>
+                    </div>
+                    <div class="item" style="border-width: 0px; padding: 0px; padding-bottom: 15px">
+                        <nvd3-multi-bar-horizontal-chart
+                                data="incomeData"
+                                id="stackedBar"
+                                width="550"
+                                height="20"
+                                showValues="true"
+                                stacked="true">
+                            <svg></svg>
+                        </nvd3-multi-bar-horizontal-chart>
+                    </div>
+
+                    <div class="item" style="padding: 10px; padding-top: 15px; padding-left: 50px;">
+                        <div style="width: 10px; height: 10px; background-color: #5698c6; float: left;"></div>
+                        <span style="font-size: 10px; float: left; margin-top: -5px; margin-left: 5px">Cost: {{record.cost}}</span>
+                        <div style="width: 10px; height: 10px; background-color: #cfd8e9; float: left;  margin-left: 20px"></div>
+                        <span style="font-size: 10px; float: left; margin-top: -5px; margin-left: 5px">Profit: {{profit}}</span>
+                    </div>
+                    <div class="item" style="border-width: 0px; padding: 0px; padding-bottom: 15px">
+                        <nvd3-multi-bar-horizontal-chart
+                                data="costData"
+                                id="stackedCost"
+                                width="550"
+                                height="20"
+                                showValues="true"
+                                stacked="true">
+                            <svg></svg>
+                        </nvd3-multi-bar-horizontal-chart>
+                    </div>
+
+                    <div class="item item-input-inset pd-blue" ng-click="showAddPayment = !showAddPayment; showAddInvoice = false; showAddCost = false;">
+                        <span ng-show="!showAddPayment">+</span><span ng-show="showAddPayment">-</span><span>&nbsp;Add Payment Received From Customer</span>
+                    </div>
+                    <div class="item item-input-inset pd-blue" ng-show="showAddPayment" style="border-width: 0px;">
+                        <label class="item-input-wrapper" style="margin-right: 10px">
+                            <input type="number" ng-model="newpayment.amount" placeholder="Amount">
+                        </label>
+                        <label class="item-input-wrapper">
+                            <input type="text" ng-model="newpayment.method" placeholder="Payment Method">
+                        </label>
+                    </div>
+                    <div class="list list-inset pd-blue" ng-show="showPaymentMethodSuggestion && showAddPayment">
+                        <div class="item payment-button" ng-repeat="paymentMethod in paymentMethods | filter:deposit.method" type="item-text-wrap" ng-click="newpayment.method = paymentMethod">
+                            <p>{{paymentMethod}}</p>
+                        </div>
+                    </div>
+                    <div class="item item-toggle pd-blue" ng-show="showAddPayment" style="border-width: 0px; padding-top: 0px">
+                        <span>Pay with credit</span>
+                        <label class="toggle toggle-calm" style="margin-top: -15px">
+                            <input type="checkbox" ng-model="newpayment.payWithCredit" ng-change="payWithCreditFlip(newpayment.payWithCredit)">
+                            <div class="track">
+                                <div class="handle"></div>
+                            </div>
+                        </label>
+                    </div>
+                    <div ng-show="showAddPayment" class="item item-input-inset pd-blue" style="border-width: 0px; padding-top: 0px; padding-bottom: 0px">
+                        <label class="item-input-wrapper">
+                            <input type="text" ng-model="newpayment.notes" placeholder="Payment Notes">
+                        </label>
+                    </div>
+                    <div ng-show="showAddPayment" class="item pd-blue" style="border-width: 0px;">
+                        <button class="button button-small" ng-click="addPayment(); showAddPayment = false">
+                            Add Payment
+                        </button>
+                        <button class="button button-small" ng-click="showAddPayment = false">
+                            Cancel
+                        </button>
+                    </div>
+
+
+
+
+                    <div class="item item-input-inset pd-red" ng-click="showAddCost = !showAddCost; showAddInvoice = false; showAddPayment = false">
+                        <span ng-show="!showAddCost">+</span><span ng-show="showAddCost">-</span><span>&nbsp;Add Cost </span>
+                    </div>
+                    <div class="item item-input-inset pd-red" ng-show="showAddCost" style="border-width: 0px;">
+                        <label class="item-input-wrapper" style="margin-right: 10px">
+                            <input type="number" ng-model="newcost.amount" placeholder="Amount">
+                        </label>
+                        <label class="item-input-wrapper">
+                            <input type="text" ng-model="newcost.payableTo" placeholder="Payable to">
+                        </label>
+                    </div>
+                    <div class="list list-inset pd-red" ng-show="showPayableToSuggestion && showAddCost">
+                        <div class="item payment-button" ng-repeat="payable in payableTos | filter:newcost.payableTo" type="item-text-wrap" ng-click="newcost.payableTo = payable">
+                            <p>{{payable}}</p>
+                        </div>
+                    </div>
+                    <div ng-show="showAddCost" class="item item-input-inset pd-red" style="border-width: 0px; padding-top: 0px; padding-bottom: 0px">
+                        <label class="item-input-wrapper">
+                            <input type="text" ng-model="newcost.notes" placeholder="Payment Notes">
+                        </label>
+                    </div>
+                    <div ng-show="showAddCost" class="item pd-red" style="border-width: 0px;">
+                        <button class="button button-small" ng-click="addCost(); showAddCost = false">
+                            Add Cost
+                        </button>
+                        <button id="closeAddCostButton" class="button button-small" ng-click="showAddCost = false">
+                            Cancel
+                        </button>
+                    </div>
+
+
+
+
+                    <div class="item item-input-inset pd-green" ng-click="showAddInvoice = !showAddInvoice; showTransactions = false; showAddCost = false; showAddPayment = false">
+                        <span ng-show="!showAddInvoice">+</span><span ng-show="showAddInvoice">-</span><span>&nbsp;Add Invoice Item</span>
+                    </div>
+                    <div class="item item-input-inset pd-green" ng-show="showAddInvoice" style="border-width: 0px;">
+                        <label class="item-input-wrapper" style="margin-right: 10px">
+                            <input type="number" ng-model="newinvoice.amount" placeholder="Amount">
+                        </label>
+                        <label class="item-input-wrapper">
+                            <input type="text" ng-model="newinvoice.name" placeholder="Service/Item Name">
+                        </label>
+                    </div>
+                    <div class="item item-input-inset pd-green" ng-show="showAddInvoice" style="border-width: 0px;">
+                        <label class="item-input-wrapper" style="margin-right: 10px">
+                            <input type="text" ng-model="newinvoice.unit" placeholder="Unit">
+                        </label>
+                        <label class="item-input-wrapper" style="margin-right: 10px">
+                            <input type="number" ng-model="newinvoice.unitPrice" placeholder="Unit Price">
+                        </label>
+                        <label class="item-input-wrapper">
+                            <input type="number" ng-model="newinvoice.numUnits" placeholder="Number Units">
+                        </label>
+                    </div>
+                    <div ng-show="showAddInvoice" class="item item-input-inset group-list-items pd-green">
+                        <label class="item-input-wrapper">
+                            <input type="text" ng-model="newinvoice.notes" placeholder="Invoice Notes">
+                        </label>
+                    </div>
+                    <div ng-show="showAddInvoice" class="item pd-green" style="border-width: 0px;">
+                        <button class="button button-small" ng-click="addInvoice(); showAddInvoice = false">
+                            Add Invoice
+                        </button>
+                        <button class="button button-small" ng-click="showAddInvoice = false">
+                            Cancel
+                        </button>
+                    </div>
+
+
+
+
+                    <div class="item item-input-inset" ng-click="showTransactions = !showTransactions">
+                        <span ng-show="showTransactions">- Close</span><span ng-show="!showTransactions">+ View</span>&nbsp;Transaction History
+                    </div>
+                    <div ng-show="showTransactions" class="item" type="item-text-wrap">
+                        <ion-scroll zooming="false" direction="xy">
+                            <table style="table-layout: fixed">
+                                <tr>
+                                    <th>
+                                        <button class="button button-stable" ng-click="order('type')">
+                                            Type
+                                        </button>
+                                    </th>
+                                    <th>
+                                        <button class="button button-stable" ng-click="order('amount')">
+                                            Amount
+                                        </button>
+                                    </th>
+                                    <th>
+                                        <button style="width: 200px" class="button button-stable" ng-click="order('notes')">
+                                            Notes
+                                        </button>
+                                    </th>
+                                    <th>
+                                        <button style="width: 120px" class="button button-stable" ng-click="order('timestamp')">
+                                            Timestamp
+                                        </button>
+                                    </th>
+                                    <th>
+
+                                    </th>
+                                </tr>
+                                <tr ng-repeat="transaction in record.transactions | orderBy:predicate:reverse" >
+                                    <td ng-class="{'pd-green': transaction.type == 'invoice', 'pd-red': transaction.type == 'cost', 'pd-blue': transaction.type == 'payment'}">
+                                        {{transaction.type}}
+                                    </td>
+                                    <td width="50">
+                                        <span style="width: 50px" ng-model="transaction.amount" type="number" ng-focus="focusOnTransaction(transaction)">{{transaction.amount}}</span>
+                                    </td>
+
+                                    <td width="250">
+                                        <p type="item-text-wrap">
+                                            {{transaction.notes}}
+                                        </p>
+
+                                    </td>
+                                    <td style="width: 120px">
+                                        {{transaction.timestamp | date:'MM/dd h:mma'}}
+                                    </td>
+                                    <td>
+                                        {{transaction.method}}{{transaction.payableTo}}{{transaction.name}}
+                                    </td>
+
+
+
+                                    <td>
+                                        <button class="button button-calm button-small" ng-click="removeTransaction(transaction)">
+                                            Remove
+                                        </button>
+                                        <!--<button class="button button-positive button-small" ng-show="transaction.showSaveButton" ng-click="saveTransaction(transaction)">-->
+                                        <!--Save-->
+                                        <!--</button>-->
+                                        <!--<button class="button button-balanced button-small" ng-show="transaction.showSaveButton" ng-click="cancelTransaction(transaction)">-->
+                                        <!--Cancel-->
+                                        <!--</button>-->
+                                    </td>
+                                </tr>
+                            </table>
+                        </ion-scroll>
+                    </div>
+
+                    <label class="item item-input">
+                        <span class="input-label">Time:</span>
+                        <span>{{record.time | date:'medium'}}</span>
+                    </label>
+
+                    <label class="item item-input">
+                        <span class="input-label">Customer</span>
+                        <span>{{record.customer}}</span>
+                    </label>
+
+                    <label class="item item-input">
+                        <span class="input-label">Total Invoice Amount</span>
+                        <span>{{record.invoice}}</span>
+                    </label>
+
+                    <label class="item item-input">
+                        <span class="input-label">Amount Paid</span>
+                        <span>{{record.paid}}</span>
+                    </label>
+
+                    <label class="item item-input" style="height: 120px">
+                        <span class="input-label">Notes</span>
+                        <textarea ng-model="record.notes" type="text" rows="6"/>
+                    </label>
+
+
+                </div>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

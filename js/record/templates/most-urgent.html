@@ -1,0 +1,38 @@
+<ion-view view-title="Most Urgent">
+    <ion-content>
+
+
+        <div class="list">
+
+            <div class="item item-input-inset">
+                <label class="item-input-wrapper">
+                    <input type="text" placeholder="search key" ng-model="searchKey">
+                </label>
+            </div>
+
+        </div>
+        <div class="list card">
+            <div class="item item-body">
+                <ion-list>
+                    <ion-item class="item-remove-animate item-icon-right" ng-repeat="item in recentRecords | orderBy:-created | filter:searchKey " type="item-text-wrap" href="#/tab/record/{{item.$id}}">
+                        <h2 style="margin-top: 0px">Customer: {{item.customer}}</h2>
+                        <p style="color: {{(item.due > today) ? 'green': 'red'}}">Due: {{item.due | date:'medium'}}</p>
+                        <p>{{item.notes}}</p>
+                        <p style="color: {{(item.paid/item.amount) >= 1 ? 'green': 'red'}}">Amount paid: {{item.paid}}/{{item.invoice}}</p>
+                        <p style="color: {{(item.progress == 100) ? 'green': 'red'}}">Progress: {{item.progress}}%</p>
+
+                        <i class="icon ion-chevron-right icon-accessory"></i>
+
+                        <ion-option-button class="button-calm" ng-click="complete(item, recentRecords)">
+                            Complete
+                        </ion-option-button>
+                        <ion-option-button class="button-stable" ng-click="removeFromProgressList(item, recentRecords)">
+                            Remove From List
+                        </ion-option-button>
+                    </ion-item>
+                </ion-list>
+
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,62 @@
+<ion-view view-title="Add Record">
+    <ion-header-bar class="pd-blue">
+        <button class="button button-stable" ng-click="close()">Close</button>
+        <h1 class="title pd-blue">Add Record</h1>
+        <button class="button button-calm" ng-click="addRecord()">Save</button>
+    </ion-header-bar>
+
+    <ion-content ng-click="onClick($event)">
+        <form>
+            <div class="list">
+                    <span class="input-label">Due Date:</span>
+
+                <time-picker dt="dt" class="ob-form-timepicker"
+                             show-time-picker="true"
+                             show-date-picker="true"
+                             data-inc-icon-class="ion ion-chevron-up"
+                             data-dec-icon-class="ion ion-chevron-down"></time-picker>
+
+                <div>
+                    <label class="item item-input">
+                        <span class="input-label">Customer</span>
+                        <input ng-model="newrecord.customer" type="text">
+                    </label>
+                    <div class="list list-inset" ng-show="showCustomerSuggestion">
+                        <div class="item customer-button" ng-repeat="customer in customers | filter:newrecord.customer:false" type="item-text-wrap" ng-click="selectCustomer(customer)">
+                            <p>{{customer.name}}</p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--<label class="item item-input">-->
+                    <!--<span class="input-label">Amount</span>-->
+                    <!--<input ng-model="newrecord.amount" type="number">-->
+                <!--</label>-->
+
+                <!--<label class="item item-input">-->
+                    <!--<span class="input-label">Deposit</span>-->
+                    <!--<input ng-model="deposit.amount" type="number">-->
+                <!--</label>-->
+
+                <!--<label class="item item-input">-->
+                    <!--<span class="input-label">Deposit Payment Method</span>-->
+                    <!--<input ng-model="deposit.method" type="text">-->
+                <!--</label>-->
+                <!--<div class="list list-inset" ng-show="showPaymentMethodSuggestion">-->
+                    <!--<div class="item payment-button" ng-repeat="paymentMethod in paymentMethods | filter:deposit.method" type="item-text-wrap" ng-click="selectPaymentMethod(paymentMethod)">-->
+                        <!--<p>{{paymentMethod}}</p>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <label class="item item-input" style="height: 120px">
+                    <span class="input-label">Notes</span>
+                    <textarea ng-model="newrecord.notes" type="text" rows="6"/>
+                </label>
+
+                <input class="button button-calm item" type="submit" ng-click="addRecord()" value="Save" />
+            </div>
+
+        </form>
+    </ion-content>
+</ion-view>
