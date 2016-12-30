@@ -99,6 +99,18 @@ var report = angular.module('reportModule', ['ionic', 'starter', "firebase", 'ti
             $scope.predicate = predicate;
         };
 
+        $scope.export = function () {
+            var excel = "amount,customerName\n";
+            for(var i = 0; i < $scope.transactions.length; i++) {
+                var obj = $scope.transactions[i];
+                excel += obj.amount + "," + obj.customerName + "\n";
+            }
+            console.log(excel);
+
+            var blob = new Blob([excel], {type: "text/plain;charset=utf-8"});
+            saveAs(blob, "hello world.csv");
+        };
+
     })
     .controller('InvoiceCtrl', function($scope, Customers, Records, $state, $stateParams, appFactory, $ionicHistory) {
 
