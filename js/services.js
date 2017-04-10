@@ -136,6 +136,9 @@ angular.module('starter.services', ["firebase"])
 
                 return array.$save(record);
             },
+            removeFromArray: function(array, record){
+                return array.$remove(record )
+            },
             save: function(record){
                 record.lastModifiedDate = Firebase.ServerValue.TIMESTAMP;
                 return record.$save();

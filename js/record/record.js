@@ -571,6 +571,29 @@ var record = angular.module('recordModule', ['ionic', 'starter', "firebase", 'ti
             console.log(data);
             $scope.uncollectedRecords = data;
         });
+
+
+        $scope.removeRecord = function(item, array){
+            Records.removeFromArray(array, item);
+        };
+
+        $scope.closeWithoutClearingPayment = function(item, array){
+            item.datePaymentCleared = Firebase.ServerValue.TIMESTAMP;
+
+            Records.saveInArray(array, item);
+        };
+
+        $scope.paidInFull = function(item, array){
+            item.transactions.push({
+                amount: item.amount - item.paid,
+                method: "unknown",
+                timestamp: Firebase.ServerValue.TIMESTAMP
+            });
+            item.paid = item.amount;
+            item.datePaymentCleared = Firebase.ServerValue.TIMESTAMP;
+
+            Records.saveInArray(array, item);
+        };
     })
 
     .controller('MostUrgentCtrl', function($scope, Customers, Records, $ionicPopup, $state) {
@@ -578,6 +601,26 @@ var record = angular.module('recordModule', ['ionic', 'starter', "firebase", 'ti
             console.log(data);
             $scope.recentRecords = data;
         });
+
+        $scope.complete = function(item, array){
+            console.log(Number.MAX_SAFE_INTEGER);
+            item.indexedDue = Number.MAX_SAFE_INTEGER;
+            item.progress = 100;
+            item.completeDate = Firebase.ServerValue.TIMESTAMP;
+            console.log(item);
+            Records.saveInArray(array, item);
+        };
+
+        $scope.removeFromProgressList = function(item, array){
+            item.indexedDue = Number.MAX_SAFE_INTEGER;
+            item.completeDate = Firebase.ServerValue.TIMESTAMP;
+
+            Records.saveInArray(array, item);
+        };
+
+        $scope.removeRecord = function(item, array){
+            Records.removeFromArray(array, item);
+        };
     })
 
     .controller('RecordDashboardCtrl', function($scope, Customers, Records, $ionicPopup, $state) {
@@ -678,6 +721,10 @@ var record = angular.module('recordModule', ['ionic', 'starter', "firebase", 'ti
             Records.saveInArray(array, item);
         };
 
+        $scope.removeRecord = function(item, array){
+            Records.removeFromArray(array, item);
+        };
+
         $scope.closeWithoutClearingPayment = function(item, array){
             item.datePaymentCleared = Firebase.ServerValue.TIMESTAMP;
 
@@ -726,6 +773,14 @@ var record = angular.module('recordModule', ['ionic', 'starter', "firebase", 'ti
         });
 
         $scope.dt = new Date();
+
+        $scope.inputDuedate = {
+            year: $scope.dt.getFullYear(),
+            month: $scope.dt.getMonth() + 1,
+            day: $scope.dt.getDate(),
+            hour: $scope.dt.getHours(),
+            minute: $scope.dt.getMinutes()
+        }
 
         $scope.showCustomerSuggestion = false;
         $scope.showPaymentMethodSuggestion = false;
@@ -777,6 +832,12 @@ var record = angular.module('recordModule', ['ionic', 'starter', "firebase", 'ti
                     deposit: true
                 });
             }
+
+            $scope.dt.setFullYear($scope.inputDuedate.year)
+            $scope.dt.setMonth($scope.inputDuedate.month - 1)
+            $scope.dt.setDate($scope.inputDuedate.day)
+            $scope.dt.setHours($scope.inputDuedate.hour)
+            $scope.dt.setMinutes($scope.inputDuedate.minute)
 
             $scope.newrecord.due = $scope.dt.getTime();
             $scope.newrecord.indexedDue = $scope.dt.getTime();

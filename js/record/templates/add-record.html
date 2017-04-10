@@ -10,11 +10,47 @@
             <div class="list">
                     <span class="input-label">Due Date:</span>
 
-                <time-picker dt="dt" class="ob-form-timepicker"
-                             show-time-picker="true"
-                             show-date-picker="true"
-                             data-inc-icon-class="ion ion-chevron-up"
-                             data-dec-icon-class="ion ion-chevron-down"></time-picker>
+                <!--<time-picker dt="dt" class="ob-form-timepicker"-->
+                             <!--show-time-picker="true"-->
+                             <!--show-date-picker="true"-->
+                             <!--data-inc-icon-class="ion ion-chevron-up"-->
+                             <!--data-dec-icon-class="ion ion-chevron-down"></time-picker>-->
+
+                <div class="row">
+                    <div class="col-33">
+                        <label class="item item-input">
+                            <span class="input-label">Year</span>
+                            <input ng-model="inputDuedate.year" type="number">
+                        </label>
+                    </div>
+                    <div class="col-33">
+                        <label class="item item-input">
+                            <span class="input-label">Month</span>
+                            <input ng-model="inputDuedate.month" type="number">
+                        </label>
+                    </div>
+                    <div class="col-33">
+                        <label class="item item-input">
+                            <span class="input-label">Day</span>
+                            <input ng-model="inputDuedate.day" type="number">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-50">
+                        <label class="item item-input">
+                            <span class="input-label">Hour</span>
+                            <input ng-model="inputDuedate.hour" type="number">
+                        </label>
+                    </div>
+                    <div class="col-50">
+                        <label class="item item-input">
+                            <span class="input-label">Minute</span>
+                            <input ng-model="inputDuedate.minute" type="number">
+                        </label>
+                    </div>
+                </div>
 
                 <div>
                     <label class="item item-input">
